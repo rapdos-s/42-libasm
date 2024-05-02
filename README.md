@@ -1,2 +1,46 @@
 # 42-libasm
-Libasm is a project focused on learning assembly language by rewriting common C functions like strlen, strcpy, and strcmp in 64-bit ASM, emphasizing proper error handling and using Intel syntax. Bonus tasks include implementing additional functions like ft_atoi_base and working with linked lists.
+Minha versão da reimplementação de funções básicas da linguagem C em Assembly.
+
+O que precisa?
+nasm
+cc
+make
+ar
+rm
+
+Como usar:
+
+Escreva um teste, exemplo:
+`main.c`
+
+```c
+#include "libasm.h"
+
+int main(void)
+{
+    ft_write(1, "Hello, World!\n", 14);
+    return (0);
+}
+```
+
+para compilar a biblioteca, utilize
+
+```sh
+make
+```
+
+Para compilar a main.c com a biblioteca
+
+```sh
+cc main.c -L. -lasm
+```
+
+Para executar
+```sh
+./a.out
+```
+
+A saída esperada é essa
+```sh
+Hello, World!
+```
