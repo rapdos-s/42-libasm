@@ -5,30 +5,20 @@
           extern    __errno_location              ; declare &errno
 
           section   .data
-EBADF     EQU       9                             ; Error value: Bad file descriptor
 EINVAL    EQU       22                            ; Error value: Invalid Argument
-MAX_FD    EQU       1024                          ; Character '\0' (null character)
+READ_CALL EQU       0                             ; number to syscall read (READ_SYSCALL_TYPE)
 NULL_CHAR EQU       0                             ; Character '\0' (null character)
 
           section   .text
 ft_read:
-          xor       rax, rax                      ; rax = 0
           test      rsi, rsi                      ; test rsi == NULL
           jz        _exit_on_EINVAL               ; jump to _exit_on_EINVAL if rsi == NULL
           mov       rax, rdi                      ; rax = rdi
-          cmp       rax, MAX_FD                   ; compare rax to MAX_FD
-          jge       _exit_on_EBADF                ; jump to _exit_on_EBADF if rdi >= MAX_FD
-          xor       rax, rax                      ; rax = READ_SYSCALL_TYPE
-          syscall                                 ; read on fd rdi and write im buffer rsi rdx characters
-          test      rax, rax                      ; test rax for errors
-          js        _exit_on_error                ; jump to _exit_on_error if error on rax
-          jmp       _exit                         ; jump to _exit
-
-_exit_on_EBADF:
-          call      __errno_location              ; rax = &errno
-          mov       dword [rax], EBADF            ; (4 bytes) *rax = EBADF (Bad file descriptor)
           xor       rax, rax                      ; rax = 0
-          mov       rax, -1                       ; rax = -1
+          mov       rax, READ_CALL                ; rax = READ_SYSCALL_TYPE
+          syscall                                 ; read on fd rdi and write im buffer rsi rdx characters
+          cmp       rax, 0                        ; compare rax to 0
+          jl        _exit_on_error                ; jump to _exit_on_error if rax < 0
           ret                                     ; return rax
 
 _exit_on_EINVAL:
@@ -39,15 +29,10 @@ _exit_on_EINVAL:
           ret                                     ; return rax
 
 _exit_on_error:
-          mov       ebx, eax                      ; ebx = eax (x32 rax)
-          neg       ebx                           ; ebx = -1 * ebx
+          xor       r12, r12                      ; r12 = 0
+          sub       r12, rax                      ; r12 = -rax
           call      __errno_location              ; rax = &errno
-          mov       dword [eax], ebx              ; (4 bytes) &errno = ebx
+          mov       [rax], r12                    ; *rax = r12
           xor       rax, rax                      ; rax = 0
           mov       rax, -1                       ; rax = -1
-          ret                                     ; return rax
-
-_exit:
-          xor       rax, rax                      ; rax = 0
-          mov       rax, rdx                      ; rax = rdx
           ret                                     ; return rax
