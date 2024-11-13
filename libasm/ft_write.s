@@ -11,8 +11,10 @@ WRI_CALL  EQU       1                             ; number to syscall write (WRI
 
           section   .text
 ft_write:
+
           test      rsi, rsi                      ; test rsi == NULL
           jz        _exit_on_EINVAL               ; jump to _exit_on_EINVAL if rsi == NULL
+
           mov       rax, rdi                      ; rax = rdi
           xor       rax, rax                      ; rax = 0
           mov       rax, WRI_CALL                 ; rax = WRITE_SYSCALL_TYPE

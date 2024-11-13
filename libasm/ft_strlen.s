@@ -13,6 +13,7 @@ ft_strlen:
           xor       rax, rax                      ; rax = 0
           test      rdi, rdi                      ; test rdi == NULL
           jz        _exit_on_EINVAL               ; jump to _exit_on_EINVAL if rdi == NULL
+
 _while:
           cmp       byte [rdi + rax], NULL_CHAR   ; compare (1 byte) rdi[rax] to '\0'
           je        _exit                         ; jump to _exit if rdi[rax] == '\0'
