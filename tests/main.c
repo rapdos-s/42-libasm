@@ -1,25 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tests.h                                            :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rapdos-s <rapdos-s@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/07 17:38:57 by rapdos-s          #+#    #+#             */
-/*   Updated: 2024/11/13 04:57:45 by rapdos-s         ###   ########.fr       */
+/*   Created: 2024/11/06 21:54:13 by rapdos-s          #+#    #+#             */
+/*   Updated: 2024/11/13 05:05:21 by rapdos-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TESTS_H
-#define TESTS_H
+#include "../libasm/libasm.h"
+#include "tests.h"
 
-// functions: printf
-#include <stdio.h>
-
-// functions: strlen
-#include <string.h>
-
-void	ft_strlen_test(void);
-void	ft_strcpy_test(void);
-
-#endif //TESTS_H
+int	main(void)
+{
+	ft_strlen_test();
+	ft_strcpy_test();
+	return (0);
+}

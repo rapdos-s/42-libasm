@@ -6,7 +6,7 @@
 #    By: rapdos-s <rapdos-s@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/13 02:41:09 by rapdos-s          #+#    #+#              #
-#    Updated: 2024/11/13 04:17:45 by rapdos-s         ###   ########.fr        #
+#    Updated: 2024/11/13 05:05:02 by rapdos-s         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,11 +30,11 @@ compilled_headers   += $(libasm_tests_header:%.h=%.h.gch)
 compilled_headers   += $(libasm_tests_header_bonus:%.h=%.h.gch)
 
 sources              = $(libasm_dir)/ft_strlen.s
-# sources             += $(libasm_dir)/ft_strcpy.s
-# sources             += $(libasm_dir)/ft_strcmp.s
-# sources             += $(libasm_dir)/ft_write.s
-# sources             += $(libasm_dir)/ft_read.s
-# sources             += $(libasm_dir)/ft_strdup.s
+sources             += $(libasm_dir)/ft_strcpy.s
+sources             += $(libasm_dir)/ft_strcmp.s
+sources             += $(libasm_dir)/ft_write.s
+sources             += $(libasm_dir)/ft_read.s
+sources             += $(libasm_dir)/ft_strdup.s
 
 sources_bonus        = $(libasm_dir)/ft_create_elem_bonus.s
 sources_bonus       += $(libasm_dir)/ft_atoi_base_bonus.s
@@ -43,18 +43,19 @@ sources_bonus       += $(libasm_dir)/ft_list_size_bonus.s
 sources_bonus       += $(libasm_dir)/ft_list_sort_bonus.s
 sources_bonus       += $(libasm_dir)/ft_list_remove_if_bonus.s
 
-sources_tests        = main.c
+sources_tests        = $(tests_dir)/main.c
 sources_tests       += $(tests_dir)/ft_strcpy_test.c
+sources_tests       += $(tests_dir)/ft_strlen_test.c
 
-sources_tests_bonus  = main_bonus.c
+sources_tests_bonus  = $(tests_dir)/main_bonus.c
 
-objects              = $(source:%.s=%.o)
-objects_bonus        = $(source_bonus:%.s=%.o)
-objects_tests        = $(sources_tests:%.s=%.o)
-objects_tests_bonus  = $(sources_tests_bonus:%.s=%.o)
+objects              = $(sources:%.s=%.o)
+objects_bonus        = $(sources_bonus:%.s=%.o)
+objects_tests        = $(sources_tests:%.c=%.o)
+objects_tests_bonus  = $(sources_tests_bonus:%.c=%.o)
 
-dependencies         = $(sources:%.c=%.d)
-dependencies        += $(sources_bonus:%.c=%.d)
+dependencies         = $(sources:%.s=%.d)
+dependencies        += $(sources_bonus:%.s=%.d)
 dependencies        += $(sources_tests:%.c=%.d)
 dependencies        += $(sources_tests_bonus:%.c=%.d)
 
@@ -69,17 +70,18 @@ magenta              = \033[0;35m
 cyan                 = \033[0;36m
 reset                = \033[0m
 main_color           = $(cyan)
-tag                  = "[ $(main_color)$(NAME)$(reset) ]"
+tag_name             = Libasm
+tag                  = "[ $(main_color)$(tag_name)$(reset) ]"
 
 # Commands #####################################################################
 
 CC                   = $$(which clang)
 CFLAGS               = -Wall -Wextra -Werror -Wpedantic
 
-ar                   = $$(which ar) crs
+ar                   = $$(which ar) -crs
 asmc                 = $$(which nasm) -f elf64
 echo                 = $$(which echo) -e $(tag)
-make                 = $$(which make) --quiet
+make                 = $$(which make) --no-print-directory
 remove               = $$(which rm) -f
 valgrind             = $$(which valgrind)
 depflags             = -MMD -MF $(@:%.o=%.d)
@@ -89,7 +91,7 @@ depflags             = -MMD -MF $(@:%.o=%.d)
 -include $(dependencies)
 .DEFAULT_GOAL = all
 .PHONY: all clean fclean re
-.PHONY: mandatory bonus tests tests_bonus duck
+.PHONY: mandatory bonus duck
 
 # Basic Rules ##################################################################
 
@@ -97,24 +99,24 @@ all:
 	@$(echo) "make all"
 	@$(make) mandatory
 	@$(make) bonus
-	@$(make) test
-	@$(make) tests_bonus
+	@$(make) $(tests_name)
+	@$(make) $(tests_bonus_name)
 	@$(echo) "make all done."
 
 clean:
 	@$(echo) "make clean"
 	@$(echo) "removing object files..."
-	$(remove) $(objects)
+	@$(remove) $(objects)
 	@$(echo) "removing bonus object files..."
-	$(remove) $(objects_bonus)
+	@$(remove) $(objects_bonus)
 	@$(echo) "removing tests object files..."
-	$(remove) $(objects_tests)
+	@$(remove) $(objects_tests)
 	@$(echo) "removing tests bonus object files..."
-	$(remove) $(objects_tests_bonus)
-	@$(echo) "removing dependency files..."
+	@$(remove) $(objects_tests_bonus)
+	@$(echo) "removing dependencies files..."
 	@$(remove) $(dependencies)
 	@$(echo) "removing compilled headers files..."
-	$(remove) $(compilled_headers)
+	@$(remove) $(compilled_headers)
 	@$(echo) "make clean done."
 
 fclean:
@@ -136,27 +138,27 @@ re:
 
 # Compilation Rules ############################################################
 
-$(NAME):
-	@$(echo) "make $(NAME)"
-	@$(make) mandatory
-	@$(make) bonus
-	@$(make) test
-	@$(make) tests_bonus
-	@$(echo) "make all done."
-
 mandatory: $(objects)
 
 bonus: $(objects_bonus)
 
-test: mandatory $(objects_tests)
-	@$(echo) "Compiling $(NAME)..."
-	@$(CC) $(objects_tests) $(NAME)
-	@$(echo) "$(NAME) compiled."
+$(NAME):
+	@$(echo) "make $(NAME)"
+	@$(make) mandatory
+	@$(make) bonus
+	@$(make) $(tests_name)
+	@$(make) $(tests_bonus_name)
+	@$(echo) "make all done."
 
-tests_bonus: bonus $(objects_tests_bonus)
-	@$(echo) "Compiling $(NAME)..."
-	@$(CC) $(objects_tests_bonus) $(NAME)
-	@$(echo) "$(NAME) compiled."
+$(tests_name): mandatory $(objects_tests)
+	@$(echo) "Compiling $(tests_name)..."
+	@$(CC) -o $(tests_name) $(objects_tests) $(NAME)
+	@$(echo) "$(tests_name) compiled."
+
+$(tests_bonus_name): bonus $(objects_tests_bonus)
+	@$(echo) "Compiling $(tests_bonus_name)..."
+	@$(CC) -o $(tests_bonus_name) $(objects_tests_bonus) $(NAME)
+	@$(echo) "$(tests_bonus_name) compiled."
 
 %.o: %.s $(libasm_header)
 	@$(echo) "Assembling $(<)..."

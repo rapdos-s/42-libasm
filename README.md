@@ -1,18 +1,44 @@
 # 42-libasm
-Minha versão da reimplementação de funções básicas da linguagem C em Assembly.
+Minha versão da reimplementação de algumas funções básicas da linguagem C em Assembly.
 
-O que precisa?
-nasm
-cc
-make
-ar
-rm
+### Como está o andamento desse repositório?
 
-Como usar:
+**Mandatório**
+
+- [ ] ft_strlen
+- [ ] ft_strcpy
+- [ ] ft_strcmp
+- [ ] ft_write
+- [ ] ft_read
+- [ ] ft_strdup
+
+**Bônus**
+
+- [ ] ft_atoi_base
+- [ ] ft_list_push_front
+- [ ] ft_list_size
+- [ ] ft_list_sort
+- [ ] ft_list_remove_if
+
+**Outros Pontos**
+
+- [x] ~~Makefile~~
+
+### O que precisa?
+
+- ar
+- clang
+- echo
+- make
+- nasm
+- rm
+- valgrind
+
+### Como usar:
 
 Escreva um teste, exemplo:
-`main.c`
 
+`main.c`
 ```c
 #include "libasm.h"
 

@@ -1,21 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   main_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rapdos-s <rapdos-s@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/06 21:54:13 by rapdos-s          #+#    #+#             */
-/*   Updated: 2024/11/10 02:11:18 by coder            ###   ########.fr       */
+/*   Created: 2024/11/13 05:04:38 by rapdos-s          #+#    #+#             */
+/*   Updated: 2024/11/13 05:06:06 by rapdos-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libasm/libasm.h"
-#include "tests/tests.h"
+#include "../libasm/libasm_bonus.h"
+#include "tests_bonus.h"
 
 int	main(void)
 {
-	ft_strlen_test();
-	ft_strcpy_test();
 	return (0);
 }
